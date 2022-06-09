@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@assets/*": ["assets/*"],
+      "@styles/*": ["styles/*"],
+      "@interfaces/*": ["interfaces/*"],
+      "@pages/*": ["pages/*"],
+      "@enums/*": ["enums/*"],
+      "@helpers/*": ["helpers/*"]
+    }
+  },
+  "include": ["src/svg.d.ts"]
+}
