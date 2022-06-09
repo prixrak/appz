@@ -22,8 +22,8 @@ const ClientContracts: FC = () => {
     { title: 'Name', fieldName: 'name' },
     { title: 'Surname', fieldName: 'surname' },
     { title: 'Email', fieldName: 'email' },
-    { title: 'Start work date' },
-    { title: 'End work date' },
+    { title: 'Contract start date' },
+    { title: 'Contract end date' },
     { title: 'Services' },
   ];
 
@@ -123,6 +123,7 @@ const ClientContracts: FC = () => {
         <SelectedElementsBlock
           selectedElements={selectedElements.map((selectedElement) => selectedElement.id)}
           handleSubmit={handleSubmitSettingSelectedElements}
+          title="Delete contracts"
         ></SelectedElementsBlock>
       )}
     </div>

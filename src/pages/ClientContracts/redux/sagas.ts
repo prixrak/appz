@@ -41,14 +41,14 @@ function* setSelectedElementsActionAsync({ payload: ids }: ReturnType<typeof set
     const clientContracts: ClientContractsData[] = yield select(
       (state) => state.clientContractsReducer.clientContracts.data
     );
-    const setGuardsAction = setClientContracts({
+    const setClientContractsAction = setClientContracts({
       data: clientContracts.filter((clientContracts) => !ids.includes(clientContracts.id)),
       state: DataState.Fulfilled,
     });
-    yield put(setGuardsAction);
-    yield put(displayNotification('Guards succseefully deleted'));
+    yield put(setClientContractsAction);
+    yield put(displayNotification('Contracts succseefully deleted'));
   } catch {
-    yield put(displayNotification('Failed to delete clientContracts 🥺'));
+    yield put(displayNotification('Failed to delete contracts 🥺'));
   }
 }
 
@@ -90,7 +90,7 @@ function* changeClientActionAsync({ payload: changedClient }: ReturnType<typeof 
     const clientContracts: ClientContractsData[] = yield select(
       (state) => state.clientContractsReducer.clientContracts.data
     );
-    const setGuardsAction = setClientContracts({
+    const setClientContractsAction = setClientContracts({
       data: clientContracts.map((clientContracts) =>
         clientContracts?.client?.id === changedClient.id
           ? { ...clientContracts, client: changedClient }
@@ -98,14 +98,14 @@ function* changeClientActionAsync({ payload: changedClient }: ReturnType<typeof 
       ),
       state: DataState.Fulfilled,
     });
-    yield put(setGuardsAction);
+    yield put(setClientContractsAction);
     yield put(displayNotification(`Client ${changedClient.name ? changedClient.name : ''} succseefully changed`));
   } catch (error) {
     yield put(displayNotification('Failed to change client 🥺'));
   }
 }
 
-function* watchGetGuards() {
+function* watchGetClientContracts() {
   yield takeLatest(getClientContracts.type, getClientContractsAsync);
   yield takeEvery(changeClientContractsAction.type, changeClientContractsActionAsync);
   yield takeEvery(createClientContract.type, createClientContractAsync);
@@ -118,5 +118,5 @@ function* watchStartCheckedEvals() {
 }
 
 export function* clientContractsSaga(): Generator {
-  yield all([watchGetGuards(), watchStartCheckedEvals()]);
+  yield all([watchGetClientContracts(), watchStartCheckedEvals()]);
 }

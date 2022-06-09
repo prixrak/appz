@@ -103,6 +103,7 @@ const Guards: FC = () => {
         <SelectedElementsBlock
           selectedElements={selectedElements.map((selectedElement) => selectedElement.id)}
           handleSubmit={handleSubmitSettingSelectedElements}
+          title="Delete guards"
         ></SelectedElementsBlock>
       )}
     </div>

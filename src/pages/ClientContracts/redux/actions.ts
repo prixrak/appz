@@ -9,6 +9,6 @@ export const setSelectedElementsAction = createAction<number[]>('clientContracts
 export const changeClientContractsAction = createAction<ClientContractsData>(
   'clientContracts/changeClientContractsAction'
 );
-export const createClientContract = createAction<void>('guards/createClientContract');
+export const createClientContract = createAction<void>('clientContracts/createClientContract');
 
 export const changeClientAction = createAction<ClientData>('clientContracts/changeClientAction');

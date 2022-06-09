@@ -4,9 +4,10 @@ import { useStyles } from './SelectedElementsBlock.styles';
 interface Props {
   selectedElements: number[];
   handleSubmit: () => void;
+  title: string;
 }
 
-const SelectedElementsBlockComponent: FC<Props> = ({ selectedElements, handleSubmit }) => {
+const SelectedElementsBlockComponent: FC<Props> = ({ selectedElements, handleSubmit, title }) => {
   const styles = useStyles();
 
   return (
@@ -14,7 +15,7 @@ const SelectedElementsBlockComponent: FC<Props> = ({ selectedElements, handleSub
       <p className={styles.startLabel}>{selectedElements.length} selected</p>
       {selectedElements.length > 0 && (
         <button className={styles.startButton} onClick={handleSubmit}>
-          Delete guards
+          {title}
         </button>
       )}
     </div>

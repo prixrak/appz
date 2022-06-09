@@ -143,7 +143,7 @@ const Payments: FC = () => {
                     Total Bonus
                   </label>
                   <div className={styles.inputBlock}>
-                    <Field name="totalBonus" type="number" className={styles.inputField} />
+                    <Field min={0} name="totalBonus" type="number" className={styles.inputField} />
                   </div>
                   <ErrorMessage component="div" name="totalBonus" className={styles.errorField} />
                 </div>
@@ -152,7 +152,7 @@ const Payments: FC = () => {
                     Total Salary
                   </label>
                   <div className={styles.inputBlock}>
-                    <Field name="totalSalary" type="number" className={styles.inputField} />
+                    <Field min={0} name="totalSalary" type="number" className={styles.inputField} />
                   </div>
                   <ErrorMessage component="div" name="totalSalary" className={styles.errorField} />
                 </div>
