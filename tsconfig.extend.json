@@ -8,7 +8,8 @@
       "@pages/*": ["pages/*"],
       "@enums/*": ["enums/*"],
       "@helpers/*": ["helpers/*"],
-      "@components/*": ["components/*"]
+      "@components/*": ["components/*"],
+      "@redux/*": ["redux/*"]
     }
   },
   "include": ["src/svg.d.ts"]

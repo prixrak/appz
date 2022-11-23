@@ -1,15 +1,22 @@
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux';
 import { getAuthToken } from '../helpers/auth';
 import { User } from '../interfaces/User';
-import { RootState } from '../redux/store';
 import { AsyncData } from '@interfaces/AsyncData';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { Paths } from '@enums/Path';
 import { DataState } from '@enums/DataState';
+import { Role } from '@enums/Role';
 
 export const useAuth = (): AsyncData<User> => {
-  const currentUser = useSelector<RootState, AsyncData<User>>((state) => state.userReducer.currentUser);
+  // const currentUser = useSelector<RootState, AsyncData<User>>((state) => state.userReducer.currentUser);
+  const currentUser = {
+    state: DataState.Fulfilled,
+    data: {
+      name: 'Arman Petrosian',
+      role: Role.Worker,
+    },
+  };
+
   const navigate = useNavigate();
   const location = useLocation();
 

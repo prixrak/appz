@@ -7,6 +7,7 @@ import clientContractsReducers from '../pages/ClientContracts/redux/reducers';
 import paymentsReducers from '../pages/Payments/redux/reducers';
 import guardTeamReducers from '../pages/GuardTeam/redux/reducers';
 import guardsContractsReducers from '../pages/GuardsContracts/redux/reducers';
+import refugeesReducer from '../pages/RefugeesPage/redux/reducers';
 
 import { rootSaga } from './rootSaga';
 
@@ -21,6 +22,7 @@ export const store = configureStore({
     paymentsReducer: paymentsReducers,
     guardTeamReducer: guardTeamReducers,
     guardsContractsReducer: guardsContractsReducers,
+    refugeesReducer,
   },
   middleware: (getDefaultMiddleware) => getDefaultMiddleware({ thunk: false }).concat(sagaMiddleware),
 });

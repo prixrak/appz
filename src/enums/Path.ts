@@ -7,4 +7,5 @@ export enum Paths {
   guards = '/guards',
   payments = '/payments',
   guardsContracts = '/contracts-guards',
+  refugeesPage = '/refugees',
 }

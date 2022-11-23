@@ -16,7 +16,7 @@ export const useStyles = makeStyles({
     display: 'flex',
     cursor: 'pointer',
     flexDirection: 'column',
-
+    marginRight: 8,
     '& svg': {
       margin: -1,
       height: 12,

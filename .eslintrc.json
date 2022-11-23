@@ -43,7 +43,7 @@
     "no-unused-vars": "off",
     "no-warning-comments": [1, { "terms": ["debug"], "location": "anywhere" }]
   },
-  "ignorePatterns": ["**/*.test.tsx"],
+  "ignorePatterns": ["**/*.test.tsx", "!.fttemplates/**/*", "!.fttemplates"],
   "extends": [
     "eslint:recommended",
     "plugin:@typescript-eslint/eslint-recommended",

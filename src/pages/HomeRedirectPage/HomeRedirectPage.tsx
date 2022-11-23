@@ -11,6 +11,8 @@ const HomeRedirectPageComponent: FC = () => {
     ? Paths.login
     : currentUser.data.role === Role.Accountant
     ? Paths.payments
+    : currentUser.data.role === Role.Worker
+    ? Paths.refugeesPage
     : currentUser.data.role === Role.Guard
     ? Paths.guardTeam
     : Paths.guards;

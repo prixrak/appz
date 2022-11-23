@@ -15,4 +15,10 @@ export const COLORS = {
   WHITE1: '#f1f7fe',
   GREEN1: '#38ffbd',
   GREEN2: '#00c987',
+  GRAY2: '#EDEDED',
+  GRAY: {
+    DARK: '#8F95B2',
+    PRIMARY: '#F8F8F8',
+    LIGHT: '#E6E8F0',
+  },
 };

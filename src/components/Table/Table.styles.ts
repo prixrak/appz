@@ -5,18 +5,15 @@ import { COLORS } from '@styles/colors';
 export const useStyles = makeStyles({
   root: {
     height: '100%',
-    width: '100%',
   },
   table: {
     height: '100%',
     width: '100%',
-    overflow: 'hidden',
-    overflowX: 'auto',
   },
   tableHeaderRow: {
     background: COLORS.BLUE4,
     position: 'sticky',
-    zIndex: 2,
+    zIndex: 1,
     top: 0,
     height: 69,
     fontWeight: 700,
@@ -50,6 +47,29 @@ export const useStyles = makeStyles({
       paddingLeft: 16,
       flexDirection: 'row',
       justifyContent: 'flex-start',
+    },
+  },
+  loaderHolder: {
+    width: '100%',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  backToTopButton: {
+    background: COLORS.GREEN2,
+    borderRadius: '100%',
+    width: 50,
+    height: 50,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'fixed',
+    bottom: 25,
+    right: 25,
+    cursor: 'pointer',
+
+    '& svg': {
+      fill: COLORS.WHITE,
     },
   },
 });
