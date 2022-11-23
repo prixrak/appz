@@ -7,7 +7,6 @@ import { RootState } from 'redux/store';
 import { useRefugeesPageData } from './hooks/useRefugeesPageData';
 import { setFilterInfo, setSortInfo } from './redux';
 import { useStyles } from './RefugeesPage.styles';
-import { MovedFromModal } from './components/MovedFromModal';
 import { ReactComponent as ChartIcon } from '@assets/icons/chart.svg';
 import { CSVLink } from 'react-csv';
 import { TableHeaderData } from '@interfaces/TableHeaderData';
@@ -16,7 +15,8 @@ import { get } from 'lodash';
 import { Data } from 'react-csv/components/CommonPropTypes';
 import { CustomPopup } from '@components/CustomPopup/CustomPopup';
 import { FilterInfo } from '@interfaces/FilterInfo';
-import { FilterOption } from './components/FilterOption';
+import { FilterOption } from '../../components/FilterOption';
+import { ChartModal } from '@components/ChartModal';
 
 export const RefugeesPage: FC = () => {
   const [tableHeaders, setTableHeaders] = useState<TableHeaderData[]>([
@@ -172,7 +172,7 @@ export const RefugeesPage: FC = () => {
         {tableContent}
       </Table>
       {refugees.data && (
-        <MovedFromModal
+        <ChartModal
           title={'Moved from'}
           fieldName="moved_from_city"
           isOpen={openModalForMovedFrom}
@@ -181,7 +181,7 @@ export const RefugeesPage: FC = () => {
         />
       )}
       {refugees.data && (
-        <MovedFromModal
+        <ChartModal
           title={'Moved to'}
           fieldName="moved_to_city"
           isOpen={openModalForMovedTo}

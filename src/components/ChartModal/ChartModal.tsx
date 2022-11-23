@@ -1,11 +1,11 @@
-import { CustomModal } from '@components/CustomModal';
 import React, { FC, useState } from 'react';
-import { useStyles } from './MovedFromModal.styles';
+import { useStyles } from './ChartModal.styles';
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from 'recharts';
-import { RefugeeData } from '@interfaces/RefugeeData';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 import classNames from 'classnames';
 import { get } from 'lodash';
+import { CustomModal } from './../CustomModal/CustomModal';
+import { RefugeeData } from './../../interfaces/RefugeeData';
 
 interface Props {
   isOpen: boolean;
@@ -20,7 +20,7 @@ export enum ChartTypes {
   Bar = 'Bar',
 }
 
-export const MovedFromModal: FC<Props> = ({ isOpen, setIsOpen, data, fieldName, title }) => {
+export const ChartModal: FC<Props> = ({ isOpen, setIsOpen, data, fieldName, title }) => {
   const styles = useStyles();
   const labels = Array.from(new Set(data.map((refugee) => get(refugee, fieldName))));
   const dataForMovedFrom = labels.map((label) => ({
