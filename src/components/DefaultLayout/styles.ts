@@ -14,6 +14,8 @@ export const useStyles = makeStyles({
     height: 64,
   },
   body: {
+    overflow: 'hidden',
+    width: '100%',
     position: 'relative',
     flex: 1,
     padding: '0 40px',

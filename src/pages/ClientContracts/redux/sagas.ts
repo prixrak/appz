@@ -9,9 +9,11 @@ import {
   fetchClientContracts,
   changeClientContractsHttp,
   createNewClientContracts,
+  addServices,
 } from './../../../api/clientContracts';
 import { displayNotification } from './../../../redux/notifications/actions';
 import {
+  addServicesAction,
   changeClientAction,
   changeClientContractsAction,
   createClientContract,
@@ -105,10 +107,21 @@ function* changeClientActionAsync({ payload: changedClient }: ReturnType<typeof 
   }
 }
 
+function* addServicesActionAsync({ payload: servicesToContract }: ReturnType<typeof addServicesAction>) {
+  try {
+    yield call(addServices, servicesToContract);
+    yield put(displayNotification('Services succseefully changed'));
+  } catch (error) {
+    yield put(displayNotification('Failed to change Services 🥺'));
+  }
+}
+
 function* watchGetClientContracts() {
   yield takeLatest(getClientContracts.type, getClientContractsAsync);
+
   yield takeEvery(changeClientContractsAction.type, changeClientContractsActionAsync);
   yield takeEvery(createClientContract.type, createClientContractAsync);
+  yield takeEvery(addServicesAction.type, addServicesActionAsync);
 
   yield takeEvery(changeClientAction.type, changeClientActionAsync);
 }

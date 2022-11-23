@@ -31,6 +31,10 @@ const SidebarContentItemsComponent: FC<Props> = ({ currentUser }) => {
         <UserIcon />
         <span className={styles.navText}>My team</span>
       </SidebarLink>
+      <SidebarLink to={`${Paths.guardsContracts}`} currentUser={currentUser} isShown={currentUser.role === Role.Admin}>
+        <UserIcon />
+        <span className={styles.navText}>Guards Contracts</span>
+      </SidebarLink>
     </>
   );
 };

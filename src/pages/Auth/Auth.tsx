@@ -80,7 +80,7 @@ const Auth: FC = () => {
           )}
         </Formik>
         <Link to={isRegisterView ? Paths.login : Paths.register} className={styles.footerLink}>
-          {isRegisterView ? 'Sign in' : 'Sign up'}
+          {isRegisterView && 'Sign in'}
         </Link>
       </div>
     </div>

@@ -7,4 +7,5 @@ export interface ClientContractsData {
   startDate: string | null;
   endDate: string | null;
   services: Service[] | null;
+  allServices: Service[];
 }

@@ -5,7 +5,7 @@ import { useStyles } from './InputField.styles';
 import { PayloadActionCreator } from '@reduxjs/toolkit';
 
 interface Props {
-  defaultValue: string;
+  defaultValue: string | number;
   field: string;
   object: Guard;
   changeAction: PayloadActionCreator<Guard>;

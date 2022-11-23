@@ -1,3 +1,13 @@
+export interface Address {
+  id?: number;
+  guardId?: number;
+  apartment: number;
+  city: string;
+  country: string;
+  house: number;
+  street: string;
+}
+
 export interface Guard {
   id: number;
   name: string;
@@ -5,11 +15,8 @@ export interface Guard {
   email: string;
   phoneNumber: string;
   dateOfBirth: string;
-  address: {
-    apartment: number;
-    city: string;
-    country: string;
-    house: number;
-    street: string;
-  };
+  address: Address;
+  isMarried: boolean;
+  didWorkedAsSecurityGuard: boolean;
+  weight: number;
 }

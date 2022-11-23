@@ -3,7 +3,7 @@ import { Table } from '../../components/Table/Table';
 import { useStyles } from './Payments.styles';
 import { PaymentsData } from '@interfaces/PaymentsData';
 import { useDispatch } from 'react-redux';
-import { changePaymentsAction, makePayment } from './redux/actions';
+import { addBonusesToContract, changePaymentsAction, makePayment } from './redux/actions';
 import { usePayments } from './hooks/usePayments';
 import { CustomModal } from '../../components/CustomModal';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
@@ -14,87 +14,176 @@ import sub from 'date-fns/sub';
 import InputField from './components/InputField/InputField';
 import { CustomPopup } from '../../components/CustomPopup/CustomPopup';
 import { PaymentForm } from '@interfaces/PaymentForm';
+import { PaymentByIdData } from '@interfaces/PaymentByIdData';
+import Select, { MultiValue } from 'react-select';
+import { ReactComponent as InfoIcon } from '@assets/icons/info.svg';
 
 const Payments: FC = () => {
   const [open, setOpen] = useState(false);
   const [paymentInfo, setPaymentInfo] = useState<PaymentsData>();
+  const [paymentsById, setPaymentsById] = useState<PaymentByIdData[]>();
+  const [openPaymentsById, setOpenPaymentsById] = useState(false);
+
   const tableHeaders = [
     { title: 'Full name' },
     { title: 'Email' },
     { title: 'Base Salary' },
+    { title: 'Iban' },
+    { title: 'Card number' },
     { title: 'Bonuses' },
     { title: 'Action' },
   ];
 
   const styles = useStyles();
-  const guards = usePayments();
+  const { guards, allBonuses } = usePayments();
   const dispatch = useDispatch();
+  type SelectValue = {
+    label: string;
+    value: number;
+  };
+  const handleChange = (newSelections: MultiValue<SelectValue>, contractId: number) => {
+    dispatch(
+      addBonusesToContract({
+        bonusesIds: newSelections.map((selection) => selection.value),
+        contractId,
+      })
+    );
+  };
 
-  const tableContent =
+  const options = allBonuses.data?.map((bonus) => ({
+    value: bonus.id,
+    label: bonus.name + ': ' + bonus.bonusAmount,
+  }));
+
+  const guradDataSorted =
     guards.data &&
-    guards.data.map((guard) => {
-      const { fullName, email, id, baseSalary, bonuses } = guard;
-      return (
-        <tr key={id} className={styles.tableDataRow}>
-          <td onClick={(e) => e.stopPropagation()}>
-            <div className={styles.memberBlock}>
-              <InputField
-                changeAction={changePaymentsAction}
-                defaultValue={fullName}
-                object={guard}
-                field={'fullName'}
-                notChangble
-              />
-            </div>
-          </td>
-          <td>
-            <InputField
-              changeAction={changePaymentsAction}
-              defaultValue={email}
-              object={guard}
-              field={'email'}
-              notChangble
-            />
-          </td>
-          <td>
-            <InputField
-              changeAction={changePaymentsAction}
-              defaultValue={baseSalary}
-              object={guard}
-              field={'baseSalary'}
-              notChangble
-            />
-          </td>
-          <td>
-            {bonuses.length > 0 ? (
-              <div className={styles.bonusesBlock}>
-                {bonuses.map(({ id, name, bonusAmount, description }) => (
-                  <div key={id}>
-                    <CustomPopup trigger={<span className={styles.bonus}>{name + ': ' + bonusAmount}</span>}>
-                      <div>{description}</div>
-                    </CustomPopup>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div>no bonuses</div>
-            )}
-          </td>
-          <td>
-            <button
-              type="submit"
-              className={classNames(styles.button, styles.buttonMedium)}
-              onClick={() => {
-                setOpen(true);
-                setPaymentInfo(guard);
-              }}
-            >
-              Make payment
-            </button>
-          </td>
-        </tr>
-      );
+    guards.data.slice().sort((guard1, guard2) => {
+      if (guard1.fullName < guard2.fullName) {
+        return -1;
+      }
+      if (guard1.fullName > guard2.fullName) {
+        return 1;
+      }
+      return 0;
     });
+
+  const tableContent = guradDataSorted?.map((guard) => {
+    const { fullName, email, id, baseSalary, bonuses, payments, iban, cardNumber } = guard;
+    const defaultOptions = bonuses.map((bonus) => ({
+      value: bonus.id,
+      label: bonus.name + ': ' + bonus.bonusAmount,
+    }));
+
+    return (
+      <tr
+        key={id}
+        className={classNames(styles.tableDataRow, { [styles.noCursor]: payments.length === 0 })}
+        onClick={() => {
+          if (payments.length !== 0) {
+            setPaymentsById(payments);
+            setOpenPaymentsById(true);
+          }
+        }}
+      >
+        <td>
+          <div className={styles.memberBlock}>
+            <InputField
+              changeAction={changePaymentsAction}
+              defaultValue={fullName}
+              object={guard}
+              field={'fullName'}
+              notChangble
+            />
+          </div>
+        </td>
+        <td>
+          <InputField
+            changeAction={changePaymentsAction}
+            defaultValue={email}
+            object={guard}
+            field={'email'}
+            notChangble
+          />
+        </td>
+        <td>
+          <InputField
+            changeAction={changePaymentsAction}
+            defaultValue={baseSalary}
+            object={guard}
+            field={'baseSalary'}
+            notChangble
+          />
+        </td>
+        <td>
+          <InputField
+            changeAction={changePaymentsAction}
+            defaultValue={iban}
+            object={guard}
+            field={'iban'}
+            notChangble
+          />
+        </td>
+        <td>
+          <InputField
+            changeAction={changePaymentsAction}
+            defaultValue={cardNumber}
+            object={guard}
+            field={'cardNumber'}
+            notChangble
+          />
+        </td>
+        <td>
+          <div onClick={(e) => e.stopPropagation()}>
+            <div className={styles.bonusesContainer}>
+              <div className={styles.select}>
+                <Select
+                  isMulti
+                  name="colors"
+                  options={options}
+                  className="basic-multi-select"
+                  classNamePrefix="select"
+                  onChange={(newSelections) => handleChange(newSelections, id)}
+                  defaultValue={defaultOptions}
+                ></Select>
+              </div>
+              {bonuses.length > 0 && (
+                <CustomPopup
+                  trigger={
+                    <div>
+                      <InfoIcon />
+                    </div>
+                  }
+                >
+                  <div className={styles.bonusesBlock}>
+                    {bonuses.map(({ id, name, bonusAmount, description }) => (
+                      <div key={id}>
+                        <CustomPopup trigger={<span className={styles.bonus}>{name + ': ' + bonusAmount}</span>}>
+                          <div>{description}</div>
+                        </CustomPopup>
+                      </div>
+                    ))}
+                  </div>
+                </CustomPopup>
+              )}
+            </div>
+          </div>
+        </td>
+        <td>
+          <button
+            type="submit"
+            className={classNames(styles.button, styles.buttonMedium)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpen(true);
+              setPaymentInfo(guard);
+            }}
+          >
+            Make payment
+          </button>
+        </td>
+      </tr>
+    );
+  });
 
   const [initialValues, setInitialValues] = useState<PaymentForm>({
     contracId: 0,
@@ -123,6 +212,14 @@ const Payments: FC = () => {
     setOpen(false);
   }, []);
 
+  const tableHeadersPaymentsById = [
+    { title: 'Total Salary' },
+    { title: 'Total Bonus' },
+    { title: 'Start date' },
+    { title: 'End date' },
+    { title: 'Transaction date' },
+  ];
+
   return (
     <div>
       <Table
@@ -133,6 +230,32 @@ const Payments: FC = () => {
         {tableContent}
       </Table>
 
+      <CustomModal isOpen={openPaymentsById} onClose={() => setOpenPaymentsById(false)} title="Payments" crossIcon>
+        <div>
+          {paymentsById ? (
+            <Table
+              isDataLoading={false}
+              tableHeaders={tableHeadersPaymentsById}
+              customStyles={{ tableHeaderRow: styles.tableHeaderRow, tableDataRow: styles.tableDataRow }}
+            >
+              {paymentsById.map((paymentById, i) => {
+                const { totalSalary, totalBonus, startDate, endDate, transactionDate } = paymentById;
+                return (
+                  <tr key={i} className={styles.tableDataRow}>
+                    <td>{totalSalary}</td>
+                    <td>{totalBonus}</td>
+                    <td>{startDate}</td>
+                    <td>{endDate}</td>
+                    <td>{transactionDate}</td>
+                  </tr>
+                );
+              })}
+            </Table>
+          ) : (
+            <div>no payments</div>
+          )}
+        </div>
+      </CustomModal>
       <CustomModal isOpen={open} onClose={() => setOpen(false)} title="Submitting payment" crossIcon>
         <Formik enableReinitialize={true} initialValues={initialValues} onSubmit={handleFormSubmit}>
           {() => (

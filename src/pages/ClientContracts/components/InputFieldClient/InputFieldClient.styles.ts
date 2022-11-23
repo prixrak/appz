@@ -6,5 +6,6 @@ export const useStyles = makeStyles({
     borderWidth: 0,
     height: 30,
     padding: '5px 10px',
+    width: 140,
   },
 });

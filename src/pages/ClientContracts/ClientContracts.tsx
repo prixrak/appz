@@ -9,13 +9,14 @@ import {
   createClientContract,
   changeClientContractsAction,
   changeClientAction,
+  addServicesAction,
 } from './redux/actions';
 import { SelectedElementsBlock } from '../../components/SelectedElementsBlock/SelectedElementsBlock';
 import { Plus } from 'react-iconly';
 import { useClientContracts } from './hooks/useClientContracts';
 import InputField from './components/InputField/InputField';
 import InputFieldClient from './components/InputFieldClient/InputFieldClient';
-import { CustomPopup } from './../../components/CustomPopup/CustomPopup';
+import Select, { MultiValue } from 'react-select';
 
 const ClientContracts: FC = () => {
   const tableHeaders = [
@@ -43,12 +44,30 @@ const ClientContracts: FC = () => {
     setSelectedElements([]);
   }, [selectedElements]);
 
+  type SelectValue = {
+    label: string;
+    value: number;
+  };
+  const handleChange = (newSelections: MultiValue<SelectValue>, contractId: number) => {
+    dispatch(
+      addServicesAction({
+        servicesIds: newSelections.map((selection) => selection.value),
+        contractId,
+      })
+    );
+  };
+
   const tableContent =
     contracts.data &&
     contracts.data.map((contract) => {
-      const { client, startDate, endDate, services, id } = contract;
+      const { client, startDate, endDate, services, id, allServices } = contract;
       const { name, surname, email } = client ? client : { name: '', surname: '', email: '' };
+      const options = allServices.map((service) => ({
+        value: service.id,
+        label: service.name,
+      }));
 
+      const defaultOptions = services ? services.map((service) => ({ value: service.id, label: service.name })) : null;
       return (
         <tr key={id} className={styles.tableDataRow}>
           <td onClick={(e) => e.stopPropagation()}>
@@ -89,19 +108,15 @@ const ClientContracts: FC = () => {
             />
           </td>
           <td>
-            {services && services.length > 0 ? (
-              <div className={styles.servicesBlock}>
-                {services.map(({ id, name, startDate, endDate }) => (
-                  <div key={id}>
-                    <CustomPopup trigger={<span className={styles.service}>{name}</span>}>
-                      <div>{'from ' + startDate + ' to ' + endDate}</div>
-                    </CustomPopup>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <div>no services</div>
-            )}
+            <Select
+              isMulti
+              name="colors"
+              options={options}
+              className="basic-multi-select"
+              classNamePrefix="select"
+              onChange={(newSelections) => handleChange(newSelections, id)}
+              defaultValue={defaultOptions}
+            ></Select>
           </td>
         </tr>
       );

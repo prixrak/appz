@@ -11,6 +11,7 @@ import Guards from '@pages/Guards/Guards';
 import { useDispatch } from 'react-redux';
 import { checkUserValid } from './../redux/user/actions';
 import Payments from '@pages/Payments/Payments';
+import GuardsContracts from '@pages/GuardsContracts/GuardsContracts';
 
 const AppRouter: FC = () => {
   const dispatch = useDispatch();
@@ -36,6 +37,9 @@ const AppRouter: FC = () => {
         </Route>
         <Route element={<AuthProtectedRoute allowedRoles={[Role.Accountant]} />}>
           <Route path={Paths.payments} element={<Payments />} />
+        </Route>
+        <Route element={<AuthProtectedRoute allowedRoles={[Role.Admin]} />}>
+          <Route path={Paths.guardsContracts} element={<GuardsContracts />} />
         </Route>
       </Routes>
     </BrowserRouter>

@@ -5,10 +5,13 @@ import { COLORS } from '@styles/colors';
 export const useStyles = makeStyles({
   root: {
     height: '100%',
+    width: '100%',
   },
   table: {
     height: '100%',
     width: '100%',
+    overflow: 'hidden',
+    overflowX: 'auto',
   },
   tableHeaderRow: {
     background: COLORS.BLUE4,

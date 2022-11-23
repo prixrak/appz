@@ -5,9 +5,18 @@ import { guardsSaga } from '@pages/Guards/redux/sagas';
 import { clientContractsSaga } from '@pages/ClientContracts/redux/sagas';
 import { paymentsSaga } from '@pages/Payments/redux/sagas';
 import { guardTeamSaga } from '@pages/GuardTeam/redux/sagas';
+import { guardsContractsSaga } from '@pages/GuardsContracts/redux/sagas';
 
 export function* rootSaga(): Generator {
-  const sagas = [userSaga, notificationsSaga, guardsSaga, clientContractsSaga, paymentsSaga, guardTeamSaga];
+  const sagas = [
+    userSaga,
+    notificationsSaga,
+    guardsSaga,
+    clientContractsSaga,
+    paymentsSaga,
+    guardTeamSaga,
+    guardsContractsSaga,
+  ];
 
   yield all(
     sagas.map((saga) =>

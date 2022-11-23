@@ -19,13 +19,31 @@ export const useStyles = makeStyles({
     '& td': {
       borderBottom: `1px solid ${COLORS.GRAY6}`,
     },
+    '& td:first-child': {
+      width: '15%',
+    },
+    '& td:nth-child(2)': {
+      width: '20%',
+    },
+    '& td:nth-child(3)': {
+      width: '10%',
+    },
+    '& td:nth-child(4)': {
+      width: '5%',
+    },
+    '& td:nth-child(5)': {
+      width: '15%',
+    },
+  },
+  select: {
+    minWidth: 200,
   },
   tableDataRow: {
     transition: 'background-color 0.1s',
 
+    cursor: 'pointer',
     '&:hover': {
       backgroundColor: COLORS.BLUE1,
-      // cursor: 'pointer',
     },
     height: 75,
   },
@@ -124,6 +142,20 @@ export const useStyles = makeStyles({
     fontSize: 14,
     color: COLORS.RED1,
   },
+  bonusesContainer: {
+    display: 'flex',
+    columnGap: 10,
+    alignItems: 'center',
+    marginRight: 40,
+  },
+  noCursor: {
+    cursor: 'default',
+
+    '&:hover': {
+      backgroundColor: 'inherit',
+    },
+  },
+  plusBonus: {},
   bonusesBlock: {
     display: 'flex',
     flexWrap: 'wrap',
