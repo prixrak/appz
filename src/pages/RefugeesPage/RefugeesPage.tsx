@@ -5,7 +5,7 @@ import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
 import { useRefugeesPageData } from './hooks/useRefugeesPageData';
-import { setSortInfo } from './redux';
+import { setFilterInfo, setSortInfo } from './redux';
 import { useStyles } from './RefugeesPage.styles';
 import { MovedFromModal } from './components/MovedFromModal';
 import { ReactComponent as ChartIcon } from '@assets/icons/chart.svg';
@@ -15,6 +15,8 @@ import { displayNotification } from '@redux/notifications/actions';
 import { get } from 'lodash';
 import { Data } from 'react-csv/components/CommonPropTypes';
 import { CustomPopup } from '@components/CustomPopup/CustomPopup';
+import { FilterInfo } from '@interfaces/FilterInfo';
+import { FilterOption } from './components/FilterOption';
 
 export const RefugeesPage: FC = () => {
   const [tableHeaders, setTableHeaders] = useState<TableHeaderData[]>([
@@ -27,9 +29,9 @@ export const RefugeesPage: FC = () => {
 
   const [openModalForMovedFrom, setOpenModalForMovedFrom] = useState(false);
   const [openModalForMovedTo, setOpenModalForMovedTo] = useState(false);
-
   const [scvExportData, setScvExportData] = useState<string | Data | (() => string | Data)>([]);
   const headersChecked = tableHeaders.filter((item) => item.isChecked);
+  const [filters, setFilters] = useState<FilterInfo[]>([]);
 
   useEffect(() => {
     const headersCSV = headersChecked.map((item) => item.title);
@@ -63,11 +65,33 @@ export const RefugeesPage: FC = () => {
       );
     });
 
+  useEffect(() => {
+    dispatch(setFilterInfo(filters));
+  }, [filters]);
+
   return (
     <div className={styles.root}>
       <div className={styles.header}>
         <div className={styles.title}>Refugees ({isDataLoading ? '...' : refugees.data?.length})</div>
         <div className={styles.selectsWrapper}>
+          <CustomPopup trigger={<div className={styles.chartBtn}>Filters</div>} on="click" position="bottom center">
+            <div className={styles.options}>
+              {tableHeaders.map(
+                (item) =>
+                  item.fieldName && (
+                    <FilterOption
+                      value={filters.find((filter) => item.fieldName == filter.field)?.value || ''}
+                      key={item.fieldName}
+                      field={item}
+                      setFilters={setFilters}
+                    />
+                  )
+              )}
+            </div>
+            <div className={styles.chartBtn} onClick={() => setFilters([])}>
+              Clear filters
+            </div>
+          </CustomPopup>
           <CustomPopup
             trigger={
               <div className={styles.chartBtn}>

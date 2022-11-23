@@ -6,6 +6,7 @@ import { State } from './types';
 const initialState: State = {
   refugees: { data: null, state: DataState.Pending },
   sortInfo: { field: 'name', sortDirection: SortDirection.Asc },
+  filterInfo: [],
 };
 
 export const slice = createSlice({
@@ -18,9 +19,12 @@ export const slice = createSlice({
     setSortInfo(state, action) {
       state.sortInfo = action.payload;
     },
+    setFilterInfo(state, action) {
+      state.filterInfo = action.payload;
+    },
   },
 });
 
-export const { setSortInfo, setRefugees } = slice.actions;
+export const { setSortInfo, setRefugees, setFilterInfo } = slice.actions;
 
 export default slice.reducer;
