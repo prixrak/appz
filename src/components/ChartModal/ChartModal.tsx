@@ -3,14 +3,15 @@ import { useStyles } from './ChartModal.styles';
 import { PieChart, Pie, Tooltip, ResponsiveContainer } from 'recharts';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Legend } from 'recharts';
 import classNames from 'classnames';
-import { get } from 'lodash';
+import { filter, get } from 'lodash';
 import { CustomModal } from './../CustomModal/CustomModal';
 import { RefugeeData } from './../../interfaces/RefugeeData';
+import { RequestForHelpData } from '@interfaces/RequestForHelpData';
 
 interface Props {
   isOpen: boolean;
   setIsOpen: (b: boolean) => void;
-  data: RefugeeData[];
+  data: RefugeeData[] | RequestForHelpData[];
   fieldName: string;
   title: string;
 }
@@ -22,10 +23,10 @@ export enum ChartTypes {
 
 export const ChartModal: FC<Props> = ({ isOpen, setIsOpen, data, fieldName, title }) => {
   const styles = useStyles();
-  const labels = Array.from(new Set(data.map((refugee) => get(refugee, fieldName))));
+  const labels = Array.from(new Set(data.map((item) => get(item, fieldName))));
   const dataForMovedFrom = labels.map((label) => ({
     name: label,
-    value: data.filter((refugee) => get(refugee, fieldName) === label).length,
+    value: filter(data, (item: RefugeeData | RequestForHelpData) => get(item, fieldName) === label).length,
   }));
   const [currentChart, setCurrentChart] = useState(ChartTypes.Pie);
 

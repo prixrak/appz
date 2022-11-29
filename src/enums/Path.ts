@@ -8,4 +8,5 @@ export enum Paths {
   payments = '/payments',
   guardsContracts = '/contracts-guards',
   refugeesPage = '/refugees',
+  requestsForHelpPage = '/requests-for-help',
 }

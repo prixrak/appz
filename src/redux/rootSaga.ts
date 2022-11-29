@@ -7,6 +7,7 @@ import { paymentsSaga } from '@pages/Payments/redux/sagas';
 import { guardTeamSaga } from '@pages/GuardTeam/redux/sagas';
 import { guardsContractsSaga } from '@pages/GuardsContracts/redux/sagas';
 import { refugeesSaga } from '@pages/RefugeesPage/redux/sagas';
+import { requestsForHelpSaga } from '@pages/RequestsForHelpPage/redux/sagas';
 
 export function* rootSaga(): Generator {
   const sagas = [
@@ -18,6 +19,7 @@ export function* rootSaga(): Generator {
     guardTeamSaga,
     guardsContractsSaga,
     refugeesSaga,
+    requestsForHelpSaga,
   ];
 
   yield all(

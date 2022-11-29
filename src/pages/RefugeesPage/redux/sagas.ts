@@ -1,16 +1,17 @@
 import { DataState } from '@enums/DataState';
 import { getErrorInfo } from '@helpers/getErrorInfo';
 import { RefugeeData } from '@interfaces/RefugeeData';
+import { fetchRefugees } from '../../../api/refugees';
 import axios from 'axios';
-import { put, all, takeLatest } from 'redux-saga/effects';
-import { refugeesMockData } from '../mock/refugeesMockData';
+import { put, all, takeLatest, call } from 'redux-saga/effects';
 import { getRefugees } from './actions';
 import { setRefugees } from './reducers';
 
 function* getRefugeesAsync() {
   try {
-    // const response: RefugeeData[] = yield call(fetchRefugees);
-    const response: RefugeeData[] | null = refugeesMockData.data;
+    const response: RefugeeData[] = yield call(fetchRefugees);
+    // console.log(response);
+    // const response: RefugeeData[] | null = refugeesMockData.data;
     yield put(setRefugees({ data: response, state: DataState.Fulfilled }));
   } catch (error) {
     yield put(

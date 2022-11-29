@@ -3,4 +3,4 @@ import httpClient from './httpClient';
 import { RefugeeData } from '@interfaces/RefugeeData';
 
 export const fetchRefugees = (): Promise<{ data: RefugeeData[] }> =>
-  httpClient.get<{ data: RefugeeData[] }>(`${apiUrl}/refugees/`).then(({ data }) => data);
+  httpClient.get<{ data: { data: RefugeeData[] } }>(`${apiUrl}/refugees/`).then(({ data }) => data.data);

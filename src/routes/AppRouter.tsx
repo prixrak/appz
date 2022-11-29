@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from 'react';
+import React, { FC } from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { AuthProtectedRoute } from '../components/AuthProtectedRoute/AuthProtectedRoute';
 import ClientContracts from '../pages/ClientContracts/ClientContracts';
@@ -8,16 +8,16 @@ import { HomeRedirectPage } from '../pages/HomeRedirectPage';
 import { Paths } from '../enums/Path';
 import GuardTeam from '@pages/GuardTeam/GuardTeam';
 import Guards from '@pages/Guards/Guards';
-import { useDispatch } from 'react-redux';
-import { checkUserValid } from './../redux/user/actions';
+// import { checkUserValid } from './../redux/user/actions';
 import Payments from '@pages/Payments/Payments';
 import { RefugeesPage } from '@pages/RefugeesPage';
+import { RequestsForHelpPage } from '@pages/RequestsForHelpPage';
 
 const AppRouter: FC = () => {
-  const dispatch = useDispatch();
-  useEffect(() => {
-    dispatch(checkUserValid());
-  }, []);
+  // const dispatch = useDispatch();
+  // useEffect(() => {
+  //   dispatch(checkUserValid());
+  // }, []);
   return (
     <BrowserRouter>
       <Routes>
@@ -40,6 +40,9 @@ const AppRouter: FC = () => {
         </Route>
         <Route element={<AuthProtectedRoute allowedRoles={[Role.Worker]} />}>
           <Route path={Paths.refugeesPage} element={<RefugeesPage />} />
+        </Route>
+        <Route element={<AuthProtectedRoute allowedRoles={[Role.Worker]} />}>
+          <Route path={Paths.requestsForHelpPage} element={<RequestsForHelpPage />} />
         </Route>
       </Routes>
     </BrowserRouter>

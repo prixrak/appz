@@ -4,14 +4,14 @@ import { SortInfo } from '@interfaces/SortInfo';
 import React, { FC, useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from 'redux/store';
-import { useRefugeesPageData } from './hooks/useRefugeesPageData';
+import { useRequestsForHelpPageData } from './hooks/useRequestsForHelpPageData';
 import { setFilterInfo, setSortInfo } from './redux';
-import { useStyles } from './RefugeesPage.styles';
+import { useStyles } from './RequestsForHelpPage.styles';
 import { ReactComponent as ChartIcon } from '@assets/icons/chart.svg';
 import { CSVLink } from 'react-csv';
 import { TableHeaderData } from '@interfaces/TableHeaderData';
 import { displayNotification } from '@redux/notifications/actions';
-import { get } from 'lodash';
+import { capitalize, get } from 'lodash';
 import { Data } from 'react-csv/components/CommonPropTypes';
 import { CustomPopup } from '@components/CustomPopup/CustomPopup';
 import { FilterInfo } from '@interfaces/FilterInfo';
@@ -19,13 +19,14 @@ import { FilterOption } from '../../components/FilterOption';
 import { ChartModal } from '@components/ChartModal';
 import { ReactComponent as NoDataSvg } from '@assets/icons/noData.svg';
 
-export const RefugeesPage: FC = () => {
+export const RequestsForHelpPage: FC = () => {
   const [tableHeaders, setTableHeaders] = useState<TableHeaderData[]>([
-    { title: 'Name', fieldName: 'name', isChecked: false },
-    { title: 'Email', fieldName: 'email', isChecked: false },
-    { title: 'Phone', fieldName: 'phone', isChecked: false },
-    { title: 'Moved from', fieldName: 'moved_from_city', isChecked: false },
-    { title: 'Moved to', fieldName: 'moved_to_city', isChecked: false },
+    { title: 'Title', fieldName: 'title', isChecked: false },
+    { title: 'Refugee', fieldName: 'refugee.name', isChecked: false },
+    { title: 'Responsible worker', fieldName: 'worker.name', isChecked: false },
+    { title: 'Number of people', fieldName: 'number_of_people', isChecked: false },
+    { title: 'Type', fieldName: 'type', isChecked: false },
+    { title: 'Status', fieldName: 'status', isChecked: false },
   ]);
 
   const [openModalForMovedFrom, setOpenModalForMovedFrom] = useState(false);
@@ -36,7 +37,7 @@ export const RefugeesPage: FC = () => {
 
   useEffect(() => {
     const headersCSV = headersChecked.map((item) => item.title);
-    const data = refugees.data?.map((item) => {
+    const data = requestForHelp.data?.map((item) => {
       const data = headersChecked.map((header) => (header.fieldName ? get(item, header.fieldName) : ''));
       return data;
     });
@@ -44,24 +45,25 @@ export const RefugeesPage: FC = () => {
   }, [tableHeaders]);
 
   const styles = useStyles();
-  const refugees = useRefugeesPageData();
+  const requestForHelp = useRequestsForHelpPageData();
   const dispatch = useDispatch();
-  const sortInfo = useSelector<RootState, SortInfo>((state) => state.refugeesReducer.sortInfo);
+  const sortInfo = useSelector<RootState, SortInfo>((state) => state.requestsForHelpReducer.sortInfo);
   const onTableSortClick = useCallback((sortInfo) => dispatch(setSortInfo(sortInfo)), [dispatch]);
 
-  const isDataLoading = refugees.state === DataState.Pending;
+  const isDataLoading = requestForHelp.state === DataState.Pending;
   const tableContent =
-    refugees.data &&
-    refugees.data.map((refugee) => {
-      const { id, name, email, phone, moved_from_city, moved_to_city } = refugee;
+    requestForHelp.data &&
+    requestForHelp.data.map((requestforhelp) => {
+      const { id, title, refugee, worker, type, status, number_of_people } = requestforhelp;
 
       return (
         <tr key={id} className={styles.tableDataRow} onClick={(e) => e.stopPropagation()}>
-          <td>{name}</td>
-          <td>{email}</td>
-          <td>{phone ? phone : '---------'}</td>
-          <td>{moved_from_city}</td>
-          <td>{moved_to_city}</td>
+          <td>{title}</td>
+          <td>{refugee.name}</td>
+          <td>{capitalize(worker.name)}</td>
+          <td>{number_of_people}</td>
+          <td>{capitalize(type)}</td>
+          <td>{capitalize(status)}</td>
         </tr>
       );
     });
@@ -73,7 +75,7 @@ export const RefugeesPage: FC = () => {
   return (
     <div className={styles.root}>
       <div className={styles.header}>
-        <div className={styles.title}>Refugees ({isDataLoading ? '...' : refugees.data?.length})</div>
+        <div className={styles.title}>Requests for help ({isDataLoading ? '...' : requestForHelp.data?.length})</div>
         <div className={styles.selectsWrapper}>
           <CustomPopup trigger={<div className={styles.chartBtn}>Filters</div>} on="click" position="bottom center">
             <div className={styles.options}>
@@ -104,10 +106,10 @@ export const RefugeesPage: FC = () => {
           >
             <div className={styles.options}>
               <div className={styles.chartBtn} onClick={() => setOpenModalForMovedTo(true)}>
-                Moved to
+                By status
               </div>
               <div className={styles.chartBtn} onClick={() => setOpenModalForMovedFrom(true)}>
-                Moved from
+                By type
               </div>
             </div>
           </CustomPopup>
@@ -121,7 +123,7 @@ export const RefugeesPage: FC = () => {
                   }
                 }}
                 className={styles.chartBtn}
-                filename={'csvRefugees.csv'}
+                filename={'csvRequestsForHelp.csv'}
                 separator={','}
                 data={scvExportData}
               >
@@ -135,7 +137,7 @@ export const RefugeesPage: FC = () => {
                     return true;
                   }
                   const fileData = JSON.stringify(
-                    refugees.data?.map((item) => {
+                    requestForHelp.data?.map((item) => {
                       return headersChecked.reduce((acc, header) => {
                         return header.fieldName
                           ? { ...acc, [header.fieldName]: get(item, header.fieldName) }
@@ -146,7 +148,7 @@ export const RefugeesPage: FC = () => {
                   const blob = new Blob([fileData], { type: 'text/plain' });
                   const url = URL.createObjectURL(blob);
                   const link = document.createElement('a');
-                  link.download = 'jsonRefugees.json';
+                  link.download = 'jsonRequestsForHelp.json';
                   link.href = url;
                   link.click();
                 }}
@@ -157,7 +159,7 @@ export const RefugeesPage: FC = () => {
           </CustomPopup>
         </div>
       </div>
-      {refugees.data?.length === 0 && !isDataLoading ? (
+      {requestForHelp.data?.length === 0 && !isDataLoading ? (
         <div className={styles.noData}>
           <NoDataSvg />
         </div>
@@ -178,22 +180,22 @@ export const RefugeesPage: FC = () => {
           {tableContent}
         </Table>
       )}
-      {refugees.data && (
+      {requestForHelp.data && (
         <ChartModal
-          title={'Moved from'}
-          fieldName="moved_from_city"
-          isOpen={openModalForMovedFrom}
-          setIsOpen={setOpenModalForMovedFrom}
-          data={refugees.data}
-        />
-      )}
-      {refugees.data && (
-        <ChartModal
-          title={'Moved to'}
-          fieldName="moved_to_city"
+          title={'By status'}
+          fieldName="status"
           isOpen={openModalForMovedTo}
           setIsOpen={setOpenModalForMovedTo}
-          data={refugees.data}
+          data={requestForHelp.data}
+        />
+      )}
+      {requestForHelp.data && (
+        <ChartModal
+          title={'By type'}
+          fieldName="type"
+          isOpen={openModalForMovedFrom}
+          setIsOpen={setOpenModalForMovedFrom}
+          data={requestForHelp.data}
         />
       )}
     </div>

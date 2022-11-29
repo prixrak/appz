@@ -21,9 +21,7 @@ const SidebarContentComponent: FC<Props> = ({ currentUser }) => {
             clearAuthToken();
             window.location.reload();
           }}
-        >
-          Log out
-        </div>
+        ></div>
       </div>
     </>
   );

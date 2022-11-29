@@ -1,6 +1,6 @@
 import React, { FC, memo } from 'react';
 import { useStyles } from './SidebarContentItems.styles';
-import { User as UserIcon } from 'react-iconly';
+import { Heart2, User as UserIcon } from 'react-iconly';
 import { SidebarLink } from '../SidebarLink';
 import { User } from '@interfaces/User';
 import { Paths } from '@enums/Path';
@@ -38,6 +38,14 @@ const SidebarContentItemsComponent: FC<Props> = ({ currentUser }) => {
       <SidebarLink to={`${Paths.refugeesPage}`} currentUser={currentUser} isShown={currentUser.role === Role.Worker}>
         <UserIcon />
         <span className={styles.navText}>Refugees</span>
+      </SidebarLink>
+      <SidebarLink
+        to={`${Paths.requestsForHelpPage}`}
+        currentUser={currentUser}
+        isShown={currentUser.role === Role.Worker}
+      >
+        <Heart2 set="light" />
+        <span className={styles.navText}>Requests for Help</span>
       </SidebarLink>
     </>
   );
